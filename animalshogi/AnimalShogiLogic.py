@@ -66,7 +66,7 @@ class Board():
         (1 for white, -1 for black
         """
         moves = set()  # stores the legal moves.
-        mochilist = self.WhiteMochi if color == 1 else self.BlackMochi # given color's Mochiuma list
+        mochilist = self.WhiteMochi if color == 1 else self.BlackMochi # given color's Mochikoma list
 
         # Get all the squares with pieces of the given color.
         for y in range(4):
@@ -74,14 +74,14 @@ class Board():
                 if np.sign(self[x][y]) == color:
                     newmoves = self.get_moves_for_square((x,y))
                     moves.update(newmoves)
-                # Mochiuma case
+                # Mochikoma case
                 elif self[x][y] == 0 and (y == 2 or y == 3) and len(mochilist) != 0:
                     for pieces in range len(mochilist):
                         moves.add((piece, x, y, 1))
         return list(moves)
 
     def has_legal_moves(self, color):
-        mochilist = self.WhiteMochi if color == 1 else self.BlackMochi # given color's Mochiuma list
+        mochilist = self.WhiteMochi if color == 1 else self.BlackMochi # given color's Mochikoma list
       
         for y in range(4):
             for x in range(3):
@@ -89,7 +89,7 @@ class Board():
                     newmoves = self.get_moves_for_square((x,y))
                     if len(newmoves)>0:
                         return True
-                # Mochiuma case
+                # Mochikoma case
                 elif self[x][y] == 0 and (y == 2 or y == 3) and len(mochilist) != 0:
                     return True
         return False
@@ -97,9 +97,9 @@ class Board():
     def get_moves_for_square(self, square):
         """Returns all the legal moves using the piece on the square.
         Move are notated in tuple (piece, x, y, dest_x, dest_y, mochi)
-        Mochi denotes whether the move is Mochiuma move or not. In mochi case x=y=0
+        Mochi denotes whether the move is Mochikoma move or not. In mochi case x=y=0
         e.g. White lion from B-file, 1st rank to C-file, 2nd rank is (4, 1, 0, 2, 1, 0)
-             Mochiuma Black Giraffe to B-file, 3rd rank is (-3, 0, 0, 1, 2, 1)
+             Mochikoma Black Giraffe to B-file, 3rd rank is (-3, 0, 0, 1, 2, 1)
         """
         (x,y) = square
         piece = self[x][y]
@@ -127,7 +127,7 @@ class Board():
         """Perform the given move on the board.
         """
         # print(move)
-        mochilist = self.WhiteMochi if color == 1 else self.BlackMochi # given color's Mochiuma list
+        mochilist = self.WhiteMochi if color == 1 else self.BlackMochi # given color's Mochikoma list
         piece, dest_x, dest_y, mochi = move
         if piece == 1 or np.sign(self[dest_x][dest_y]) == -color:
             self.draw_counter = 0
@@ -135,14 +135,14 @@ class Board():
             self.draw_counter += 1
         piece *= color
         
-        # Mochiuma case
+        # Mochikoma case
         if mochi:
             self[dest_x][dest_y] = piece
             mochilist.remove(piece)
             return
         else:
             self[x][y] = 0
-            # Taking opponent's piece into Mochiuma list
+            # Taking opponent's piece into Mochikoma list
             if self[dest_x][dest_y] != 0:
                 mochilist.append(-self[dest_x][dest_y])
             self[dest_x][dest_y] = piece
