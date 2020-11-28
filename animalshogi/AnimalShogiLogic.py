@@ -81,6 +81,8 @@ class Board():
         return list(moves)
 
     def has_legal_moves(self, color):
+        mochilist = self.WhiteMochi if color == 1 else self.BlackMochi # given color's Mochiuma list
+      
         for y in range(4):
             for x in range(3):
                 if np.sign(self[x][y]) == color:
@@ -88,7 +90,7 @@ class Board():
                     if len(newmoves)>0:
                         return True
                 # Mochiuma case
-                elif self[x][y] == 0 and (y == 2 or y == 3) and len(mochiset) != 0:
+                elif self[x][y] == 0 and (y == 2 or y == 3) and len(mochilist) != 0:
                     return True
         return False
 
